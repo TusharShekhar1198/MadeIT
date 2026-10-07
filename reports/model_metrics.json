@@ -1,0 +1,32 @@
+{
+  "task": "repeat purchase in the final 90 days",
+  "n_customers": 3370,
+  "positive_rate": 0.57,
+  "test_size": 843,
+  "models": {
+    "logistic_regression": {
+      "precision": 0.7658,
+      "recall": 0.578,
+      "f1": 0.6588,
+      "roc_auc": 0.7247,
+      "average_precision": 0.7898
+    },
+    "random_forest": {
+      "precision": 0.741,
+      "recall": 0.6424,
+      "f1": 0.6882,
+      "roc_auc": 0.7285,
+      "average_precision": 0.8027
+    }
+  },
+  "random_forest_feature_importance": {
+    "monetary": 0.1822,
+    "quantity": 0.1652,
+    "recency_days": 0.1498,
+    "unique_products": 0.1471,
+    "avg_order_value": 0.1256,
+    "customer_tenure_days": 0.1219,
+    "frequency": 0.1082,
+    "countries": 0.0
+  }
+}

@@ -1,0 +1,9 @@
+.env
+.streamlit/secrets.toml
+.venv/
+*.sqlite3
+__pycache__/
+.pytest_cache/
+__pycache__/
+*.py[cod]
+data/raw/*.xlsx

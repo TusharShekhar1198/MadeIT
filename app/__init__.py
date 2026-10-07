@@ -1,0 +1,1 @@
+"""MadeIT Insights interfaces."""
