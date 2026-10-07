@@ -38,7 +38,7 @@ def inject_theme() -> None:
         .kpi {background:#fff;border:1px solid var(--line);border-radius:16px;padding:17px 18px;min-height:112px;transition:transform .25s ease,box-shadow .25s ease;}
         .kpi:hover {transform:translateY(-3px);box-shadow:0 14px 30px rgba(19,18,25,.08)} .kpi-label{font-size:.75rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.08em}.kpi-value{font-size:1.65rem;font-weight:800;letter-spacing:-.055em;margin-top:10px}.kpi-sub{font-size:.74rem;color:#77737c;margin-top:5px}
         .section-title{font-size:1.28rem;font-weight:800;letter-spacing:-.04em;margin:8px 0 2px}.section-copy{font-size:.88rem;color:var(--muted);margin:0 0 14px}.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:15px 18px;margin:3px 0 18px}.signal{background:#15141a;color:#f9f8f3;border-radius:16px;padding:18px;min-height:128px}.signal strong{font-size:1rem;display:block;margin:9px 0 6px}.signal p{font-size:.81rem;color:#c6c2cc;margin:0;line-height:1.5}.signal-yellow{background:var(--yellow);color:#1d1c20}.signal-yellow p{color:#3b3822}.signal-green{background:#daf3e9;color:#163d2d}.signal-green p{color:#35604e}
-        .data-note{border-left:3px solid var(--yellow);padding:10px 13px;background:#fffdf0;border-radius:0 10px 10px 0;color:#514d39;font-size:.85rem;margin-bottom:18px}.auth-wrap{max-width:940px;margin:7vh auto 0}.auth-hero{background:linear-gradient(135deg,#15141a 0%,#302c3b 100%);padding:45px;border-radius:28px;color:#fff;position:relative;overflow:hidden}.auth-hero:after{content:'✦';font-size:20rem;color:rgba(246,216,62,.15);position:absolute;right:-20px;bottom:-105px;line-height:1}.auth-hero h1{font-size:3rem;letter-spacing:-.08em;line-height:1;margin:12px 0}.auth-hero p{color:#d4d0da;max-width:500px;line-height:1.65}.auth-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:22px;margin-top:18px}.stButton>button{border-radius:10px;border:0;background:#15141a;color:#fff;font-weight:700;padding:.55rem 1rem}.stButton>button:hover{background:#f6d83e;color:#16151b;border:0}.stTabs [data-baseweb='tab-list']{gap:22px;border-bottom:1px solid var(--line)}.stTabs [data-baseweb='tab']{font-weight:700;color:#77737c;padding:9px 1px}.stTabs [aria-selected='true']{color:#15141a!important;border-bottom:3px solid var(--yellow)!important}.stDataFrame{border:1px solid var(--line);border-radius:12px;overflow:hidden}
+        .data-note{border-left:3px solid var(--yellow);padding:10px 13px;background:#fffdf0;border-radius:0 10px 10px 0;color:#514d39;font-size:.85rem;margin-bottom:18px}.auth-shell{max-width:1180px;margin:8vh auto 0}.auth-hero{background:linear-gradient(135deg,#15141a 0%,#302c3b 100%);padding:48px;border-radius:28px;color:#fff;position:relative;overflow:hidden;min-height:530px}.auth-hero:after{content:'✦';font-size:20rem;color:rgba(246,216,62,.15);position:absolute;right:-20px;bottom:-105px;line-height:1;animation:float 6s ease-in-out infinite}.auth-hero:before{content:'';width:300px;height:300px;border:1px solid rgba(246,216,62,.35);border-radius:50%;position:absolute;right:-125px;top:-125px;animation:ring 10s linear infinite}.auth-hero h1{font-size:3.3rem;letter-spacing:-.09em;line-height:.98;margin:14px 0}.auth-hero p{color:#d4d0da;max-width:455px;line-height:1.7;position:relative;z-index:1}.auth-stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;position:absolute;bottom:34px;left:48px;right:48px;z-index:1}.auth-stat{padding:13px 14px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.06);border-radius:12px;backdrop-filter:blur(8px)}.auth-stat strong{font-size:1.1rem;display:block;color:var(--yellow);margin-bottom:3px}.auth-stat span{font-size:.72rem;color:#d2cfd7}.auth-card{background:#fff;border:1px solid var(--line);border-radius:24px;padding:28px;min-height:530px;box-shadow:0 24px 55px rgba(22,20,28,.08)}.auth-card-title{font-size:1.65rem;font-weight:800;letter-spacing:-.06em;margin:8px 0 5px}.auth-card-copy{font-size:.86rem;color:var(--muted);line-height:1.55;margin-bottom:18px}.security-line{display:flex;align-items:center;gap:8px;font-size:.73rem;color:#77737c;margin-top:18px}.security-dot{width:8px;height:8px;background:var(--green);border-radius:50%;box-shadow:0 0 0 4px #e4f8ef}@keyframes float{50%{transform:translateY(-12px) rotate(8deg)}}.stButton>button{border-radius:10px;border:0;background:#15141a;color:#fff;font-weight:700;padding:.55rem 1rem}.stButton>button:hover{background:#f6d83e;color:#16151b;border:0}.stTabs [data-baseweb='tab-list']{gap:22px;border-bottom:1px solid var(--line)}.stTabs [data-baseweb='tab']{font-weight:700;color:#77737c;padding:9px 1px}.stTabs [aria-selected='true']{color:#15141a!important;border-bottom:3px solid var(--yellow)!important}.stDataFrame{border:1px solid var(--line);border-radius:12px;overflow:hidden}
         </style>
         """,
         unsafe_allow_html=True,
@@ -61,35 +61,40 @@ def heading(title: str, copy: str) -> None:
 
 
 def login_screen() -> None:
-    st.markdown("<div class='auth-wrap'><div class='auth-hero'><div class='eyebrow'>Retail decision intelligence</div><h1>See the signal.<br><span style='color:#f6d83e'>Make it actionable.</span></h1><p>MadeIT turns retail transaction data into clear decisions across sales, products, customers, and repeat-purchase behavior.</p></div></div>", unsafe_allow_html=True)
-    st.markdown("<div class='auth-wrap auth-card'>", unsafe_allow_html=True)
-    sign_in, create_account = st.tabs(["Sign in", "Create account"])
-    with sign_in:
-        with st.form("local_login"):
-            email = st.text_input("Work email", key="login_email")
-            password = st.text_input("Password", type="password", key="login_password")
-            submitted = st.form_submit_button("Enter MadeIT", type="primary", use_container_width=True)
-        if submitted:
-            user = authenticate(email, password)
-            if user:
-                st.session_state.user = user
-                st.rerun()
-            st.error("We could not verify that email and password.")
-        if google_oauth_configured():
-            st.divider()
-            if st.button("Continue with Google", use_container_width=True):
-                st.login("google")
-        else:
-            st.caption("Google sign-in can be enabled with OIDC secrets in the deployment environment.")
-    with create_account:
-        with st.form("registration"):
-            name = st.text_input("Full name")
-            email = st.text_input("Work email", key="register_email")
-            password = st.text_input("Password (10+ characters)", type="password", key="register_password")
-            submitted = st.form_submit_button("Create workspace account", type="primary", use_container_width=True)
-        if submitted:
-            ok, message = register(name, email, password)
-            (st.success if ok else st.error)(message)
+    st.markdown("<div class='auth-shell'>", unsafe_allow_html=True)
+    story, access = st.columns([1.08, .92], gap="large")
+    with story:
+        st.markdown("""<div class='auth-hero'><div class='eyebrow' style='color:#f6d83e'>Retail decision intelligence / v1.0</div><h1>Find the signal.<br><span style='color:#f6d83e'>Move with confidence.</span></h1><p>MadeIT brings revenue, product, customer, and predictive intelligence into one focused workspace for sharper retail decisions.</p><div class='auth-stat-grid'><div class='auth-stat'><strong>392K+</strong><span>cleaned transactions analyzed</span></div><div class='auth-stat'><strong>0.73</strong><span>Random Forest ROC-AUC</span></div><div class='auth-stat'><strong>RFM</strong><span>customer intelligence built in</span></div><div class='auth-stat'><strong>LIVE</strong><span>decision-ready dashboard</span></div></div></div>""", unsafe_allow_html=True)
+    with access:
+        st.markdown("<div class='auth-card'><div class='eyebrow'>Secure workspace access</div><div class='auth-card-title'>Welcome to MadeIT.</div><p class='auth-card-copy'>Sign in to explore the retail performance workspace and predictive decision layer.</p>", unsafe_allow_html=True)
+        sign_in, create_account = st.tabs(["Sign in", "Create account"])
+        with sign_in:
+            with st.form("local_login"):
+                email = st.text_input("Work email", key="login_email", placeholder="you@company.com")
+                password = st.text_input("Password", type="password", key="login_password", placeholder="Enter your password")
+                submitted = st.form_submit_button("Enter workspace →", type="primary", use_container_width=True)
+            if submitted:
+                user = authenticate(email, password)
+                if user:
+                    st.session_state.user = user
+                    st.rerun()
+                st.error("We could not verify that email and password.")
+            if google_oauth_configured():
+                st.divider()
+                if st.button("Continue with Google", use_container_width=True):
+                    st.login("google")
+            else:
+                st.caption("Google sign-in is available when OIDC is configured for this environment.")
+        with create_account:
+            with st.form("registration"):
+                name = st.text_input("Full name")
+                email = st.text_input("Work email", key="register_email", placeholder="you@company.com")
+                password = st.text_input("Password (10+ characters)", type="password", key="register_password")
+                submitted = st.form_submit_button("Create workspace account →", type="primary", use_container_width=True)
+            if submitted:
+                ok, message = register(name, email, password)
+                (st.success if ok else st.error)(message)
+        st.markdown("<div class='security-line'><span class='security-dot'></span> Protected access · Your credentials are never displayed.</div></div>", unsafe_allow_html=True)
     st.markdown("</div>", unsafe_allow_html=True)
 
 
