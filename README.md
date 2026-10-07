@@ -2,7 +2,7 @@
 
 **Retail intelligence. Made actionable.**
 
-[Live dashboard](https://madeit-insights.streamlit.app) · [Architecture](ARCHITECTURE.md)
+[Live dashboard](https://madeit-insights.streamlit.app)
 
 MadeIT Insights is an analytics and decision-intelligence workspace built on the public [UCI Online Retail dataset](https://archive.ics.uci.edu/dataset/352/online+retail). It turns transaction-level e-commerce data into executive KPIs, sales and product views, RFM customer segments, and repeat-purchase predictions.
 
@@ -47,7 +47,68 @@ flowchart LR
     USER["User"] --> AUTH["Local PBKDF2 account\nor Google OIDC"] --> UI
 ```
 
-Read the [full architecture](ARCHITECTURE.md) for components, data flow, authentication, deployment, and production considerations.
+### Component map
+
+| Layer | Technology | Responsibility |
+| --- | --- | --- |
+| Source ingestion | Python, `urllib`, `openpyxl` | Downloads the original UCI Online Retail workbook |
+| Transformation | pandas, NumPy | Validates transactions, handles duplicates/missing values, derives revenue and dates |
+| Customer analytics | pandas, scikit-learn | Creates RFM scores, RFM segments, KMeans clusters, and model features |
+| ML | scikit-learn, joblib | Trains/evaluates Logistic Regression and Random Forest classifiers |
+| Analytics database | PostgreSQL, psycopg, SQL | Optional curated tables and reusable analytical queries |
+| Dashboard | Streamlit | Authenticated executive exploration of stored data and model artifacts |
+| Prediction service | FastAPI, Pydantic | Optional typed `/predict` endpoint for model serving |
+| Authentication | PBKDF2 / Google OIDC | Development-local accounts and hosted Google sign-in |
+
+### Processing sequence
+
+```mermaid
+sequenceDiagram
+    participant S as UCI source
+    participant I as Ingestion
+    participant P as Pipeline
+    participant M as Model training
+    participant D as Dashboard
+    S->>I: Online Retail workbook
+    I->>P: Raw XLSX
+    P->>P: Deduplicate, validate, exclude cancellations
+    P->>P: Revenue, dates, RFM, customer features
+    P->>M: Customer feature parquet
+    M->>M: Stratified train/test evaluation
+    M->>D: Models, metrics, feature importance
+    P->>D: Curated transaction/customer parquet
+```
+
+### Repository layout
+
+```text
+MadeIT/
+├── app/                      # Streamlit UI and optional FastAPI API
+├── data/
+│   ├── raw/                  # Downloaded source workbook; ignored by Git
+│   └── processed/            # Curated transactions and customer features
+├── models/                   # Saved classifier pipelines
+├── reports/                  # Metrics and EDA outputs
+├── sql/analytics.sql         # PostgreSQL analytical queries
+├── src/                      # Ingestion, pipeline, training, loading, auth
+├── tests/                    # Pipeline tests
+├── .streamlit/               # Theme and OAuth secrets template
+├── requirements.txt
+└── docker-compose.yml        # Local PostgreSQL service
+```
+
+### Pipeline and model design
+
+1. **Ingest:** download the original workbook without generating transaction data.
+2. **Clean:** standardize types, parse timestamps, flag cancellations, and remove exact duplicates, invalid dates, missing customer IDs, and non-positive quantities/prices.
+3. **Feature engineer:** derive revenue, calendar dates, customer RFM metrics, order value, product breadth, and customer tenure.
+4. **Train:** use the earlier history window to predict activity in the final 90 days, avoiding target leakage.
+5. **Evaluate:** run stratified held-out evaluation with `random_state=42`, save precision, recall, F1, ROC-AUC, average precision, and Random Forest feature importance to `reports/model_metrics.json`.
+
+| Model | Purpose | Evaluation |
+| --- | --- | --- |
+| Logistic Regression | Interpretable linear baseline | Precision, recall, F1, ROC-AUC, average precision |
+| Random Forest | Non-linear comparison | Same metrics plus feature importance |
 
 ## Local setup
 
@@ -102,3 +163,20 @@ The dashboard is deployed from `app/dashboard.py` on Streamlit Community Cloud. 
 - The repeat-purchase label is activity in the final 90 days of the dataset; model features use the preceding history window.
 - Current local email/password accounts use SQLite and are suitable for development only. Google identity is handled through Streamlit OIDC. Use managed PostgreSQL or an identity provider for durable production user/role storage.
 - This project does not claim profit, store, inventory, promotion, supplier, or return metrics because the source data does not provide them.
+
+## Deployment topology and production evolution
+
+```mermaid
+flowchart LR
+    B[Browser] --> SC[Streamlit Community Cloud]
+    SC --> UI[app/dashboard.py]
+    UI --> ART[Parquet, models, metrics in repository]
+    B --> G[Google OIDC]
+    G --> SC
+    DEV[Local development] --> PG[Optional PostgreSQL container]
+    PG --> Q[sql/analytics.sql]
+```
+
+The deployed Streamlit dashboard is file-backed: it reads committed parquet/model artifacts at runtime. FastAPI and PostgreSQL are optional local or separately hosted services; Streamlit Community Cloud does not deploy them as independent services.
+
+For a multi-user enterprise version, replace the SQLite development account store with managed PostgreSQL and role-based access control. Add real feeds for stores, product cost, inventory, promotions, returns, and suppliers before enabling those decision modules.
